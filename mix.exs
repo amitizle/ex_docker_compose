@@ -48,7 +48,7 @@ defmodule ExDockerCompose.Mixfile do
   defp package do
     [
       name: "ex_docker_compose",
-      files: ["lib", "priv", "mix.exs", "README.md", "config", "LICENSE", "VERSION"],
+      files: ["lib", "mix.exs", "README.md", "config", "LICENSE", "VERSION"],
       maintainers: ["Amit Goldberg"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/amitizle/ex_docker_compose"}

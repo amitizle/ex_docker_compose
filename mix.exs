@@ -8,6 +8,8 @@ defmodule ExDockerCompose.Mixfile do
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       deps: deps(),
+      description: description(),
+      package: package(),
       # Docs
       name: "ExDockerCompose",
       source_url: "https://github.com/amitizle/ex_docker_compose",
@@ -33,6 +35,23 @@ defmodule ExDockerCompose.Mixfile do
     [
       {:porcelain, "~> 2.0"},
       {:ex_doc, "~> 0.18.1", only: :dev, runtime: false}
+    ]
+  end
+
+  defp description do
+    """
+    A simple wrapper library on top of docker-compose binary,
+    allows control of docker-compose command via Elixir code.
+    """
+  end
+
+  defp package do
+    [
+      name: "ex_docker_compose",
+      files: ["lib", "priv", "mix.exs", "README.md", "config", "LICENSE", "VERSION"],
+      maintainers: ["Amit Goldberg"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/amitizle/ex_docker_compose"}
     ]
   end
 end

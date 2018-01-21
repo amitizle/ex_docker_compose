@@ -14,7 +14,8 @@ defmodule ExDockerCompose.Mixfile do
       homepage_url: "https://github.com/amitizle/ex_docker_compose", # TODO generate docs
       docs: [
         main: "ExDockerCompose",
-        extras: ["README.md"]
+        extras: ["README.md"],
+        output: "./docs"
       ]
     ]
   end

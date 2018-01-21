@@ -8,7 +8,7 @@
     <title>ExDockerCompose – ExDockerCompose v0.1.0</title>
     <link rel="stylesheet" href="dist/app-c922dbe7ef.css" />
     
-    <script src="dist/sidebar_items-8627b2ea08.js"></script>
+    <script src="dist/sidebar_items-98200295a5.js"></script>
     
     
     
@@ -67,33 +67,39 @@
 
 
 <h1>ExDockerCompose</h1>
-<p><strong>TODO: Add description</strong></p>
-<h2 id="write-about" class="section-heading">
-  <a href="#write-about" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
-  Write about
+<p><a href="ExDockerCompose.html"><code class="inline">ExDockerCompose</code></a> is a simple library to for interacting with <a href="https://docs.docker.com/compose/"><code class="inline">docker-compose</code></a>.
+It’s a wrapper for the <code class="inline">docker-compose</code> binary and running the actuall commands by using <a href="https://github.com/alco/porcelain">Porcelain</a>.</p>
+<p>It works by spawning a <a href="https://hexdocs.pm/elixir/GenServer.html"><code class="inline">GenServer</code></a> that’s using <code class="inline">Porcelain.spawn_shell/2</code> and handles the messages coming from the
+process.</p>
+<h2 id="testing-locally" class="section-heading">
+  <a href="#testing-locally" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Testing locally
 </h2>
 
-<ul>
-<li>Configuration (<code class="inline">config.exs</code>)
-</li>
-<li>How to compile and test, gen docs etc.
-</li>
-</ul>
-<h2 id="installation" class="section-heading">
-  <a href="#installation" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
-  Installation
+<pre><code class="bash">$ mix do deps.get, deps.compile
+$ mix test</code></pre>
+<p>Tests are incomplete at the moment.</p>
+<h2 id="configuration" class="section-heading">
+  <a href="#configuration" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Configuration
 </h2>
 
-<p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed
-by adding <code class="inline">ex_docker_compose</code> to your list of dependencies in <code class="inline">mix.exs</code>:</p>
-<pre><code class="elixir">def deps do
-  [
-    {:ex_docker_compose, &quot;~&gt; 0.1.0&quot;}
-  ]
-end</code></pre>
-<p>Documentation can be generated with <a href="https://github.com/elixir-lang/ex_doc">ExDoc</a>
-and published on <a href="https://hexdocs.pm">HexDocs</a>. Once published, the docs can
-be found at <a href="https://hexdocs.pm/ex_docker_compose">https://hexdocs.pm/ex_docker_compose</a>.</p>
+<p><code class="inline">docker-compose</code> executable path is configurable by either using <a href="https://hexdocs.pm/elixir/Application.html#get_env/3">Application</a>
+config, or by using an environment varibale.
+Note that the <a href="https://hexdocs.pm/elixir/Application.html"><code class="inline">Application</code></a> config has the precedence.</p>
+<pre><code class="elixir">config :ex_docker_compose, :bin_file, &quot;/path/to/docker-compose&quot;</code></pre>
+<p>As an environment variable, <a href="ExDockerCompose.html"><code class="inline">ExDockerCompose</code></a> will look for <code class="inline">DOCKER_COMPOSE_BIN</code>.
+If non of them are found, <a href="ExDockerCompose.html"><code class="inline">ExDockerCompose</code></a> will get the <code class="inline">docker-compose</code> executable by using
+<a href="https://hexdocs.pm/elixir/System.html#find_executable/1"><code class="inline">System.find_executable(&quot;docker-compose&quot;)</code></a></p>
+<h3 id="config-porcelain" class="section-heading">
+  <a href="#config-porcelain" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Config Porcelain
+</h3>
+
+<p><code class="inline">Porcelain</code> can be configured to use the <a href="https://github.com/alco/porcelain#configuring-the-goon-driver">goon driver</a>.
+<a href="ExDockerCompose.html"><code class="inline">ExDockerCompose</code></a> configured to use <code class="inline">:goon_warn_if_missing = true</code> to deprecate the warnings, however, one can configure
+<code class="inline">Porcelain</code> to use the <code class="inline">goon</code> driver locally by adding the same configuration that’s described on <code class="inline">Porcelain</code> docs:</p>
+<pre><code class="elixir">config :porcelain, :goon_driver_path, &lt;path&gt;</code></pre>
 
       <footer class="footer">
         <p>

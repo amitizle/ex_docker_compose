@@ -143,7 +143,7 @@ defmodule ExDockerCompose.RunServer do
   defp run_command(command) do
     # TODO track https://github.com/alco/porcelain/issues/47
     # Currently I can't get stderr to be handled :/
-    %Proc{pid: pid, out: {:send, out_pid}, err: {:send, err_pid}} =
+    %Proc{pid: pid, out: {:send, _out_pid}, err: {:send, _err_pid}} =
       Porcelain.spawn_shell(command, out: {:send, self()}, err: {:send, self()})
     pid
   end
@@ -176,10 +176,10 @@ defmodule ExDockerCompose.RunServer do
     do_write_out_err(message, outputs[:out])
   end
 
-  defp write_err(message, state) do
-    %__MODULE__{outputs: outputs} = state
-    do_write_out_err(message, outputs[:err])
-  end
+  # defp write_err(message, state) do
+  #   %__MODULE__{outputs: outputs} = state
+  #   do_write_out_err(message, outputs[:err])
+  # end
 
   defp do_write_out_err(message, outputs) do
     Enum.each(outputs, fn(output) ->

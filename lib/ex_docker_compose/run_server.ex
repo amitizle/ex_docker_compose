@@ -110,7 +110,7 @@ defmodule ExDockerCompose.RunServer do
 
   @doc false
   def handle_cast({:do_command, command}, state) do
-    proc = run_command("#{command} 2>&1") # TODO temporarily 2>&1, see the comment on the run_command/1 function
+    proc = run_command(command) # TODO temporarily 2>&1, see the comment on the run_command/1 function
     in_flight_procs = state.in_flight_procs
     new_in_flight_procs = Map.put(in_flight_procs, proc, command)
     new_state = %__MODULE__{state | in_flight_procs: new_in_flight_procs}
@@ -119,13 +119,6 @@ defmodule ExDockerCompose.RunServer do
 
   @doc false
   def handle_info({_pid, :data, :out, data}, state) do
-    write_out(data, state)
-    {:noreply, state}
-  end
-
-  @doc false
-  def handle_info({_pid, :data, :err, data}, state) do
-    IO.puts "ERROR"
     write_out(data, state)
     {:noreply, state}
   end
@@ -141,10 +134,9 @@ defmodule ExDockerCompose.RunServer do
   end
 
   defp run_command(command) do
-    # TODO track https://github.com/alco/porcelain/issues/47
-    # Currently I can't get stderr to be handled :/
-    %Proc{pid: pid, out: {:send, _out_pid}, err: {:send, _err_pid}} =
-      Porcelain.spawn_shell(command, out: {:send, self()}, err: {:send, self()})
+    # TODO see if we can get the :err to report somehow, currently by using
+    # the basic driver we cannot {:send, self()} :err (see https://hexdocs.pm/porcelain/Porcelain.html)
+    %Proc{pid: pid} = Porcelain.spawn_shell(command, out: {:send, self()}, err: :out)
     pid
   end
 
@@ -167,7 +159,7 @@ defmodule ExDockerCompose.RunServer do
   defp get_outputs do
     %{
       out: [fn(message) -> IO.puts(message) end],
-      err: [fn(message) -> IO.puts(:stderr, message) end]
+      err: [fn(message) -> IO.puts(:stderr, message) end] # Not used currently
     }
   end
 

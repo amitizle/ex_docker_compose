@@ -31,7 +31,8 @@ defmodule ExDockerCompose.Mixfile do
   defp deps do
     [
       {:porcelain, "~> 2.0"},
-      {:ex_doc, "~> 0.18.1", only: :docs, runtime: false}
+      {:ex_doc, "~> 0.18.1", only: :docs, runtime: false},
+      {:inch_ex, only: :docs}
     ]
   end
 

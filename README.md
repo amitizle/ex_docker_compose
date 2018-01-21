@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/amitizle/ex_docker_compose.svg?branch=master)](https://travis-ci.org/amitizle/ex_docker_compose) [![Inline docs](http://inch-ci.org/github/amitizle/ex_docker_compose.svg)](http://inch-ci.org/github/amitizle/ex_docker_compose)
+
 # ExDockerCompose
 
 `ExDockerCompose` is a simple library to for interacting with [`docker-compose`](https://docs.docker.com/compose/).

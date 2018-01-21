@@ -8,7 +8,7 @@
     <title>ExDockerCompose – ExDockerCompose v0.1.0</title>
     <link rel="stylesheet" href="dist/app-c922dbe7ef.css" />
     
-    <script src="dist/sidebar_items-98200295a5.js"></script>
+    <script src="dist/sidebar_items-0a73e3898f.js"></script>
     
     
     
@@ -71,6 +71,66 @@
 It’s a wrapper for the <code class="inline">docker-compose</code> binary and running the actuall commands by using <a href="https://github.com/alco/porcelain">Porcelain</a>.</p>
 <p>It works by spawning a <a href="https://hexdocs.pm/elixir/GenServer.html"><code class="inline">GenServer</code></a> that’s using <code class="inline">Porcelain.spawn_shell/2</code> and handles the messages coming from the
 process.</p>
+<h2 id="usage" class="section-heading">
+  <a href="#usage" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Usage
+</h2>
+
+<p>TL;DR: <code class="inline">ExDockerCompose.&lt;subcommand&gt;(&lt;compose_opts&gt;, &lt;subcommand_opts&gt;)</code>, where:</p>
+<ul>
+<li><code class="inline">subcommand</code> is one of the available <code class="inline">docker-compose</code> subcommands.
+</li>
+<li><code class="inline">compose_opts</code> is a <a href="https://hexdocs.pm/elixir/List.html"><code class="inline">List</code></a> of parameters to the <code class="inline">docker-compose</code> binary (not for the subcommand), type <code class="inline">docker-comose --help</code> to see those.
+</li>
+<li><code class="inline">subcommand_opts</code> is a <a href="https://hexdocs.pm/elixir/List.html"><code class="inline">List</code></a> of parameters to the specific subcommand, for example; <code class="inline">docker-compose up -t 10</code>
+</li>
+</ul>
+<p>Since the library simply takes those and translates the command, subcommand and the opts to a <code class="inline">docker-compose</code> binary execution,
+usage is similar to the regular usage of <code class="inline">docker-compose</code>.</p>
+<h3 id="example" class="section-heading">
+  <a href="#example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Example
+</h3>
+
+<p>Consider the following <code class="inline">docker-compose</code> definition and assume that the yaml file is
+located at <code class="inline">/tmp/docker-compose.yml</code>. The content of the file is:</p>
+<pre><code class="yaml">version: &#39;3&#39;
+services:
+  redis:
+    image: &quot;redis:alpine&quot;</code></pre>
+<pre><code class="elixir">$ iex -S mix
+
+iex(1)&gt; ExDockerCompose.up([{:f, &quot;/tmp/docker-compose.yml&quot;}], [])
+:ok
+iex(2)&gt; Creating network &quot;tmp_default&quot; with the default driver
+Creating tmp_redis_1 ... done
+
+Attaching to tmp_redis_1
+redis_1  | 1:C 21 Jan 17:16:28.737 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+redis_1  | 1:C 21 Jan 17:16:28.737 # Redis version=4.0.6, bits=64, commit=00000000, modified=0, pid=1, just started
+redis_1  | 1:C 21 Jan 17:16:28.737 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+redis_1  | 1:M 21 Jan 17:16:28.739 * Running mode=standalone, port=6379.
+redis_1  | 1:M 21 Jan 17:16:28.739 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+redis_1  | 1:M 21 Jan 17:16:28.739 # Server initialized
+redis_1  | 1:M 21 Jan 17:16:28.739 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &#39;echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled&#39; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+redis_1  | 1:M 21 Jan 17:16:28.739 * Ready to accept connections
+
+nil
+iex(3)&gt; ExDockerCompose.stop([{:f, &quot;/tmp/docker-compose.yml&quot;}], [])
+:ok
+iex(4)&gt; Stopping tmp_redis_1 ...
+redis_1  | 1:signal-handler (1516554998) Received SIGTERM scheduling shutdown...
+redis_1  | 1:M 21 Jan 17:16:38.442 # User requested shutdown...
+redis_1  | 1:M 21 Jan 17:16:38.442 * Saving the final RDB snapshot before exiting.
+redis_1  | 1:M 21 Jan 17:16:38.449 * DB saved on disk
+Stopping tmp_redis_1 ... done
+
+tmp_redis_1 exited with code 0
+
+pid #PID&lt;0.168.0&gt; exited with exit code 0 (command /usr/local/bin/docker-compose -f /tmp/docker-compose.yml stop)
+pid #PID&lt;0.163.0&gt; exited with exit code 0 (command /usr/local/bin/docker-compose -f /tmp/docker-compose.yml up)
+
+nil</code></pre>
 <h2 id="testing-locally" class="section-heading">
   <a href="#testing-locally" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Testing locally
